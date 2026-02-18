@@ -31,11 +31,13 @@ After angle approval:
 2. **Section titles** - Each gets an evocative, descriptive title that works as a standalone hook
 3. **Evidence per section** - At least one of: data/stats, quotation, real-world example, analogy/metaphor
 4. **Web search for evidence** - Before finalizing outline, run quick web searches to verify:
+   - **CRITICAL: Use the most recent data available (2026 data, not 2024/2025)** - Always search for "2026" or "latest" versions
    - Current product names, versions, and features (e.g., GPT-5 not GPT-4, latest Claude features)
    - Recent releases, dates, and timelines
    - Stats and data points are accurate and up-to-date
    - Examples and case studies are current and correctly attributed
    - Any quotes are real and correctly sourced
+   - When data from different years exists, prioritize the most recent year available
 5. **Visuals** - Plan one `[VISUAL: description]` every 500-800 words. Web search for reference images, diagrams, or graphics that match each visual need — provide links Ody can use or adapt
 6. **Open** - First sentence: provocation, stance, or hook (no warmup). Use bookmark-triggers: "here's how," "here's why"
 7. **Close** - Plan specific device: personal story, callback to opening, mic-drop line, or provocative question
@@ -55,6 +57,7 @@ See references/style-guide.md for complete voice, formatting, and content rules.
 - Include 2-4 quotations, at least one personal anecdote
 - Use `[VISUAL: description]` tags inline
 - Make it actionable
+- **NO inline markdown links** - Collect all sources in a References section at the bottom with numbered citations [1], [2], etc.
 
 **Ody's signature style elements:**
 - → chains for causality: "Technology emerges → Incumbents dismiss → Startups win"
