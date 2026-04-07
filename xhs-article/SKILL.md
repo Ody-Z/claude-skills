@@ -1,6 +1,6 @@
 ---
 name: xhs-article
-description: 帮 Ody 创作小红书图文笔记/长文。当 Ody 说要写小红书、写笔记、写干货帖时使用。遵循 4 阶段工作流：(1) 选题与切入角度, (2) 结构与大纲, (3) 撰写初稿, (4) 审稿与打磨。Phase 1/2 完成后等 Ody 确认；Phase 3/4 连续执行不中断，仅中英文对照表需确认。
+description: 帮 Ody 创作小红书图文笔记/长文。当 Ody 说要写小红书、写笔记、写干货帖时使用。遵循 5 阶段工作流：(1) 选题与切入角度, (2) 结构与大纲, (3) 撰写初稿, (4) 审稿与打磨, (5) 报纸风排版与截图。Phase 1/2 完成后等 Ody 确认；Phase 3/4 连续执行不中断，仅中英文对照表需确认；Phase 5 封面确认后批量生成全文排版。
 ---
 
 # 小红书笔记创作
@@ -154,3 +154,66 @@ python3 ~/.claude/skills/xhs-article/scripts/clean.py "/Users/odyzhou/Desktop/xh
 脚本自动完成两件事：
 - 将正文内所有 `——`（破折号）替换为 `：`
 - 删除正文内多余空行（保留 `###` 标题前和 `---` 分隔线前后各一个空行）
+
+## Phase 5: 报纸风排版与截图
+
+Phase 4 完成、中英文对照表确认后，进入排版阶段。
+
+### 5.1 生成封面（等 Ody 确认）
+
+使用报纸社论风格（详见 `references/newspaper-style-template.md`）生成封面 HTML：
+- 画布 1080x1800（9:15 比例）
+- 牛皮纸背景 `#f5f0e8`，纸面噪点纹理
+- 报头 "DEEP DIVE" 推到顶部（缩略图会裁掉，点进来才看到）
+- **核心数字做视觉锚点**（最大字号，缩略图可读）
+- 主标题精简到 1-2 行
+- 副标题用原文金句（有认知冲突的引用）
+- 署名 + 装饰性页码
+
+封面字号和配色严格遵循 `references/newspaper-style-template.md`。
+
+生成后用 Chrome headless 截图：
+```bash
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --screenshot="cover.png" --window-size=1080,1800 --hide-scrollbars "file:///path/to/cover.html" 2>/dev/null
+```
+
+**打开截图给 Ody 确认封面效果后再往下走。**
+
+### 5.2 生成全文排版页（连续执行）
+
+封面确认后，参考 `scripts/generate_newspaper_pages.py` 的模版结构，为当前文章生成全部正文页：
+
+**分页原则：**
+- 每页正文约 350-400 字（38px 字号下的可读容量）
+- 新章节标题开启新页或在上一页自然衔接
+- 最后一页为居中排版的结尾金句
+- 末页为参考文献
+
+**正文页设计规范：**
+- 同封面的牛皮纸背景、噪点纹理、装饰性分栏线
+- 页眉：左 "DEEP DIVE"，右 页码 "03 / 11"
+- 章节标题：Noto Serif SC, 52px, 900
+- 正文：Noto Serif SC, 38px, 400, line-height 1.85
+- 加粗：weight 700, color #111
+- 页脚：左 "Ody · [来源]"，右 装饰性大页码
+- container padding: 48px top, 80px sides, **120px bottom**（防止底部被截）
+
+**生成流程：**
+1. 用 Python 脚本定义每页内容，批量生成 HTML
+2. Chrome headless 批量截图为 PNG
+3. 逐张检查渲染结果（读取 PNG 验证无截断、无溢出、加粗正常）
+4. 确认无误后通知 Ody
+
+所有 PNG 输出到 `/Users/odyzhou/Desktop/xhs-posts/covers/`，文件名 `page-01.png` 到 `page-NN.png`，按顺序上传小红书。
+
+### 5.3 内嵌信息图（可选）
+
+文章中标注了 `[配图: 描述]` 的位置，可以尝试用 HTML/CSS 直接在排版页内生成信息图，替代外部配图。适合的类型：
+- **对比框架图**（如 10x better / cheaper / different 三行对比）
+- **流程/演进图**（如产品转型路径，用节点 + 箭头 + 删除线表示放弃的方向）
+- **数据卡片**（关键数字突出展示）
+- **引用卡片**（金句 + 来源，报纸 pull quote 风格）
+
+做法：在对应页的 HTML 中，用 CSS 绘制图表元素（flex 布局、border、background、伪元素等），保持报纸风格的配色和字体。不依赖外部图片资源，纯 HTML/CSS 实现，确保 Chrome headless 截图时完整渲染。
+
+信息图页单独占一页或嵌入正文页（视空间而定），与文字页保持相同的页眉、页脚、背景风格。
