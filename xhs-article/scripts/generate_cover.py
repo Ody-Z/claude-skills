@@ -29,7 +29,7 @@ def main():
     parser.add_argument("--date", default="", help="Date string, e.g. 2026-04-13")
     parser.add_argument("--source", default="", help="Source line under header")
     parser.add_argument("--number", default="", help="Big number (visual anchor)")
-    parser.add_argument("--unit", default="", help="Unit after big number (e.g. %, $, K+)")
+    parser.add_argument("--unit", default="", help="Unit after big number (e.g. %%, $, K+)")
     parser.add_argument("--data-line", default="", help="Explanatory line below number (HTML ok)")
     parser.add_argument("--title", default="", help="Main title (HTML ok, use <br> for line breaks)")
     parser.add_argument("--subtitle", default="", help="Subtitle / quote (HTML ok)")
