@@ -6,12 +6,11 @@ import subprocess, os, html
 DIR = os.path.dirname(os.path.abspath(__file__))
 
 CSS = """
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@400;700;900&family=Playfair+Display:wght@700;900&display=swap');
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
   width: 1080px; height: 1800px;
   background: #f5f0e8;
-  font-family: 'Noto Serif SC', serif;
+  font-family: 'Songti SC','STSong',serif;
   overflow: hidden; position: relative;
 }
 .texture {
@@ -33,12 +32,12 @@ body {
   padding-bottom: 20px; border-bottom: 1px solid #ccc; margin-bottom: 0;
 }
 .header-left {
-  font-family: 'Playfair Display', serif;
+  font-family: Georgia,serif;
   font-size: 18px; font-weight: 700; color: #bbb;
   letter-spacing: 6px; text-transform: uppercase;
 }
 .header-right {
-  font-family: 'Noto Sans SC', sans-serif;
+  font-family: 'PingFang SC','Hiragino Sans GB',sans-serif;
   font-size: 20px; color: #bbb;
 }
 .content {
@@ -46,32 +45,32 @@ body {
   justify-content: center; padding: 20px 0;
 }
 .section-title {
-  font-family: 'Noto Serif SC', serif;
+  font-family: 'Songti SC','STSong',serif;
   font-size: 52px; font-weight: 900; color: #111;
   line-height: 1.3; margin-bottom: 40px;
   padding-bottom: 24px; border-bottom: 2px solid #ddd;
 }
 p {
-  font-family: 'Noto Serif SC', serif;
+  font-family: 'Songti SC','STSong',serif;
   font-size: 38px; font-weight: 400; color: #333;
   line-height: 1.85; margin-bottom: 28px;
 }
 p:last-child { margin-bottom: 0; }
 strong { font-weight: 700; color: #111; }
 .pull-quote {
-  font-family: 'Noto Serif SC', serif;
+  font-family: 'Songti SC','STSong',serif;
   font-size: 46px; font-weight: 700; color: #333;
   line-height: 1.6; font-style: italic;
   padding: 32px 0; margin: 16px 0;
   border-top: 2px solid #ccc; border-bottom: 2px solid #ccc;
 }
 .closing-text {
-  font-family: 'Noto Serif SC', serif;
+  font-family: 'Songti SC','STSong',serif;
   font-size: 46px; font-weight: 700; color: #111;
   line-height: 1.7; text-align: center;
 }
 .closing-light {
-  font-family: 'Noto Serif SC', serif;
+  font-family: 'Songti SC','STSong',serif;
   font-size: 38px; font-weight: 400; color: #555;
   line-height: 1.7; text-align: center;
   margin-top: 48px;
@@ -81,11 +80,11 @@ strong { font-weight: 700; color: #111; }
   padding-top: 20px; border-top: 1px solid #ccc;
 }
 .footer-left {
-  font-family: 'Noto Sans SC', sans-serif;
+  font-family: 'PingFang SC','Hiragino Sans GB',sans-serif;
   font-size: 20px; color: #bbb;
 }
 .footer-right {
-  font-family: 'Playfair Display', serif;
+  font-family: Georgia,serif;
   font-size: 80px; font-weight: 900;
   color: rgba(0,0,0,0.04); line-height: 1;
 }
@@ -223,7 +222,7 @@ pages.append(make_page(11, TOTAL,
     + p('42 章经 × Kuse CTO 徐宇豪访谈<br><span style="font-size:32px; color:#888;">xueqiu.com/1948398032/381679526</span>')
     + p('Peter Thiel《Zero to One》<br><span style="font-size:32px; color:#888;">2014</span>')
     + p('ribbi.ai<br><span style="font-size:32px; color:#888;">ribbi.ai</span>')
-    + '<div style="margin-top:80px; padding-top:40px; border-top:2px solid #ccc; font-family:Noto Sans SC,sans-serif; font-size:28px; color:#aaa; line-height:1.8;">'
+    + '<div style="margin-top:80px; padding-top:40px; border-top:2px solid #ccc; font-family:PingFang SC,sans-serif; font-size:28px; color:#aaa; line-height:1.8;">'
     + '本文基于公开访谈内容整理，加入作者个人观点。<br>'
     + '文中提及的产品和公司信息均来自公开来源。<br>'
     + '观点仅代表作者个人，不构成任何投资建议。'
@@ -260,6 +259,7 @@ for fname in all_files:
         CHROME, "--headless=new", "--disable-gpu",
         f"--screenshot={out}",
         "--window-size=1080,1800",
+        "--force-device-scale-factor=2",
         "--hide-scrollbars",
         f"file://{fpath}"
     ], capture_output=True, text=True)

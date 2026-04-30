@@ -193,16 +193,43 @@ python3 ~/.claude/skills/xhs-article/scripts/generate_cover.py \
 - 每页正文约 350-400 字（38px 字号下的可读容量）
 - 新章节标题开启新页或在上一页自然衔接
 - 最后一页为居中排版的结尾金句
-- 末页为参考文献
+- **末页为参考文献页（必做，不得省略）**
+
+### 末页参考资料页（强制）
+
+**为什么强制**：xhs-posts 是公开发布物。每篇文章的事实/数字/引文都需要可追溯来源。漏这一页 = 内容失去可验证性。Ody 反复在终审时发现这页被漏，所以这里固化为不可跳过步骤。
+
+**触发条件**：只要文章正文 markdown 末尾有 `参考资料：[URL...]` 段落或正文中引用了任何外部数据/案例/原文片段（数字、引文、产品名背书），最后一页必须是参考资料页。
+
+**唯一例外**：文章是纯 Ody 一手随笔，零外部素材。这种情况在 Phase 4 输出末必须显式声明"无参考资料"，否则视为漏做。
+
+**参考资料页内容结构（按这个填）**：
+- 章节标题：`参考资料`
+- 主条目：来源名 · 日期 + 文章/视频/Podcast 标题 + URL（URL 用 32px 浅灰色显示）
+- 多个来源每条独立一段
+- 底部加分隔线 + 免责说明（信源说明 + 观点声明）
+
+**参考脚本**：本次 harness blog 文章 `scripts/generate_harness_blog_pages.py` 的 page-11 块就是标准实现，复用即可。
+
+**TOTAL 页数核算**：参考资料页计入 TOTAL。例如正文 8 页 + 参考资料 1 页 + 封面 1 页 = TOTAL 10。改 TOTAL 后所有页码自动更新（脚本里所有 make_page 调用都用 TOTAL 变量）。
 
 **正文页设计规范：**
 - 同封面的牛皮纸背景、噪点纹理、装饰性分栏线
 - 页眉：左 "DEEP DIVE"，右 页码 "03 / 11"
-- 章节标题：Noto Serif SC, 52px, 900
-- 正文：Noto Serif SC, 38px, 400, line-height 1.85
+- 章节标题：Songti SC, 52px, 900
+- 正文：Songti SC, 38px, 400, line-height 1.85
 - 加粗：weight 700, color #111
 - 页脚：左 "Ody · [来源]"，右 装饰性大页码
 - container padding: 48px top, 80px sides, **120px bottom**（防止底部被截）
+
+**字体策略（重要，不要改回 Google Fonts）：** 全部用 macOS 本地字体——中文衬线 `Songti SC`、中文无衬线 `PingFang SC`、英文衬线/装饰 `Georgia`。**禁止** `@import url('https://fonts.googleapis.com/...')` —— 国内网络不通时每页 Chrome 等字体 25 秒+，13 页可能跑半小时。本地字体跑完 13 页 ≈ 27 秒。
+
+**清晰度策略（重要）：** Chrome 截图 flag 必须包含 `--force-device-scale-factor=2`，输出 2160×3600 的 2x retina PNG。XHS 上传后保留更多细节，用户放大看官方架构图时不糊。已写进 `generate_*_pages.py` 模板。
+
+**内嵌外部图片（OpenAI / Anthropic blog 截图等）的清晰度规则：**
+1. **用全分辨率原图**，不要用 `-small` 后缀的压缩版（截图比 web 显示分辨率高，base64 内联即可，文件大小不是问题）
+2. CSS 中 `figure-img-wrap img { max-width: 920px }` 只是 CSS 约束；浏览器在 2x DPI 下会用 1840px 渲染，所以源图实际像素 ≥ 1840px 才不糊
+3. 上线前 Read 一下生成的 PNG，放大看图内文字能否清晰
 
 ### 6.3 内嵌信息图（只嵌有信息增量的）
 
@@ -232,9 +259,10 @@ python3 ~/.claude/skills/xhs-article/scripts/generate_cover.py \
 1. **无截断/溢出** — 文字没有被底部截掉，内容在页面可视范围内
 2. **加粗渲染正常** — `<strong>` 标签生效，粗体清晰可辨
 3. **信息图完整** — 图表元素（框、箭头、标签）全部渲染，无缺失
-4. **字体加载成功** — 中文字体（Noto Serif SC）正确显示，非 fallback 字体
-5. **CJK smart quote 问题** — 检查英文撇号是否有多余空格（Noto Serif SC 中 `&rsquo;` 会渲染异常，应使用 ASCII 撇号 `'`）
+4. **字体加载成功** — 中文字体（Songti SC）正确显示，非 fallback 字体
+5. **CJK smart quote 问题** — 检查英文撇号是否有多余空格（Songti SC 中 `&rsquo;` 会渲染异常，应使用 ASCII 撇号 `'`）
 6. **页码连续** — 页眉页码 "02/10" 格式正确，与实际总页数一致
+7. **末页是参考资料页** — 翻到最后一张图，必须是 6.2 规定的参考资料页，不能是收束金句页或正文页。漏掉这一页 = Phase 6 不通过。
 
 发现问题时当场修 HTML 并重新截图，不要把问题留给 Ody。
 
@@ -249,9 +277,9 @@ python3 ~/.claude/skills/xhs-article/scripts/generate_cover.py \
 
 ### 6.5 HTML 编写注意事项
 
-- **避免 `&rsquo;` `&lsquo;` 等 smart quote HTML 实体**：在 Noto Serif SC 正文中会渲染出多余空格。直接用 ASCII 撇号 `'` 和普通引号 `"`。`&ldquo;` `&rdquo;` 在中文语境下可用（渲染为中文引号""）
+- **避免 `&rsquo;` `&lsquo;` 等 smart quote HTML 实体**：在 Songti SC 正文中会渲染出多余空格。直接用 ASCII 撇号 `'` 和普通引号 `"`。`&ldquo;` `&rdquo;` 在中文语境下可用（渲染为中文引号""）
 - **长标题用 `<br>` 换行**：section-title 在 52px 下一行约 17 个中文字符，超出时手动加 `<br>` 控制断行位置
-- **pull-quote 用 Playfair Display**：英文金句用 pull-quote 样式（Playfair Display italic），视觉区分度更高，且该字体的 smart quote 渲染正常
+- **pull-quote 用 Georgia**：英文金句用 pull-quote 样式（Georgia italic），视觉区分度更高，且该字体的 smart quote 渲染正常
 
 ### 6.6 X 短推文衍生（英文）
 

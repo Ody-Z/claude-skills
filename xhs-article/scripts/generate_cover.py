@@ -63,6 +63,7 @@ def main():
         CHROME, "--headless=new", "--disable-gpu",
         f"--screenshot={args.output}",
         "--window-size=1080,1800",
+        "--force-device-scale-factor=2",
         "--hide-scrollbars",
         f"file://{tmp_html}"
     ], capture_output=True, text=True)
