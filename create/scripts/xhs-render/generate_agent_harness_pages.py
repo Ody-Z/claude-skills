@@ -4,7 +4,7 @@
 import subprocess, os, re, base64
 
 DIR = os.path.dirname(os.path.abspath(__file__))
-OUT_DIR = "/Users/odyzhou/Desktop/xhs-posts/covers"
+OUT_DIR = "/Users/odyzhou/Desktop/xhs-build/agent-harness"
 
 def img_data_uri(filename):
     """Read image file and return as base64 data URI (avoids Chrome file:// sub-resource issues)."""

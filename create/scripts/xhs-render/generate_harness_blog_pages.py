@@ -4,7 +4,7 @@
 import subprocess, os, re
 
 DIR = os.path.dirname(os.path.abspath(__file__))
-OUT_DIR = "/Users/odyzhou/Desktop/xhs-posts/covers"
+OUT_DIR = "/Users/odyzhou/Desktop/xhs-build/harness-blog"
 
 CSS = """
 

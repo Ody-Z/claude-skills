@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-xhs-article post-processing script.
+xhs Phase 4 post-processing script (part of /create).
 
 Enforces two formatting rules automatically:
   1. Replace 破折号（——）with Chinese colon（：）

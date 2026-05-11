@@ -4,8 +4,8 @@
 import subprocess, os, re, base64
 
 DIR = os.path.dirname(os.path.abspath(__file__))
-OUT_DIR = "/Users/odyzhou/Desktop/xhs-posts/covers"
-IMG_DIR = "/Users/odyzhou/Desktop/xhs-posts/covers/heidi-images"
+OUT_DIR = "/Users/odyzhou/Desktop/xhs-build/heidi"
+IMG_DIR = "/Users/odyzhou/Desktop/xhs-build/heidi/images"
 
 def img_b64(filename):
     """Embed local image as base64 data URI."""

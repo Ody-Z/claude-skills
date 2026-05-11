@@ -11,7 +11,7 @@ Usage:
     --data-line '<em>uptime</em> · 成了行业新常态' \
     --title 'Agent 时代的开发者<br>已经停不下来了' \
     --subtitle '造出最火 Agent 的人说<br><em>Slow the Fuck Down</em>' \
-    --output /Users/odyzhou/Desktop/xhs-posts/covers/page-01.png
+    --output /Users/odyzhou/Desktop/xhs-build/[slug]/page-01.png
 
 All arguments are optional except --output.
 Template placeholders not filled will be left empty.
